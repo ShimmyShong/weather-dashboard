@@ -3,7 +3,6 @@ var queryGeoURL = "http://api.openweathermap.org/data/2.5/weather?q=" + city + "
 
 var buttonEl = $('.btn');
 
-
 var weatherInfoArray = [];
 var newInfoObject = [];
 var usedDays = [];
@@ -37,7 +36,8 @@ function getWeatherDays(){ // this function takes in the latitude and longitude 
         success: function(result){
             for(e = 0; e < result.list.length; e++){
                 temp = result.list[e].main.temp; // the temp is measures in kelvin
-                sky = result.list[e].weather[0].main; // displays how the sky will look
+                sky = result.list[e].weather[0].icon; // displays how the sky will look
+                skyURL = 'http://openweathermap.org/img/w/' + sky + '.png';
                 humidity = result.list[e].main.humidity; // displays humidity levels
                 windSpeed = result.list[e].wind.speed; // displays wind speed in meters/sec
                 date = result.list[e].dt; // displays the date and time
@@ -57,7 +57,7 @@ function getWeatherObject(){ // converts variables to more proper values then pu
 
     var newInfoObject= {
         temp: temp + ' °F',
-        sky: sky,
+        sky: skyURL,
         humidity: humidity,
         windSpeed: windSpeed + ' MPH',
         date: date
@@ -69,18 +69,22 @@ function getWeatherObject(){ // converts variables to more proper values then pu
 function addCardElements(){ // adds card elements and classes depending on which city is typed in
     var titleEl = $('<div>');
     var cardEl1 = $('<div>');
-    var cardEl2 = $('<div>');
+    var cardEl2 = $('<img>').attr('src', `${weatherInfoArray[e].sky}`);
+    cardEl2.css({
+        width: '15%',
+        margin: 'auto',
+    })
     var cardEl3 = $('<div>');
     var cardEl4 = $('<div>');
     var containerEl = $('#cards-container');
     titleEl.addClass('border card-header d-flex flex-column align-items-center m-1')
     cardEl1.addClass('card-text d-flex flex-column align-items-center m-1')
-    cardEl2.addClass('card-text d-flex flex-column align-items-center m-1')
+    cardEl2.addClass('d-flex flex-column align-items-center')
     cardEl3.addClass('card-text d-flex flex-column align-items-center m-1')
     cardEl4.addClass('card-text d-flex flex-column align-items-center m-1')
     titleEl.text(`${weatherInfoArray[e].date}`);
     cardEl1.text(`${weatherInfoArray[e].temp}`);
-    cardEl2.text(`${weatherInfoArray[e].sky}`);
+    // cardEl2.text(`${weatherInfoArray[e].sky}`);
     cardEl3.text(`${weatherInfoArray[e].humidity}`);
     cardEl4.text(`${weatherInfoArray[e].windSpeed}`);
     if (!usedDays.includes(weatherInfoArray[e].date)){ // this if statement filters out days that were already appended before
@@ -98,7 +102,7 @@ function addCardElements(){ // adds card elements and classes depending on which
     // console.log(divEl.text())
 }
 
-buttonEl.on('click', function(event){
+buttonEl.on('click', function(event){ // TODO add icons and local storage
     event.preventDefault();
     usedDays = []; // need to reset the arrays on each click so that they can be used again in the functions
     weatherInfoArray = [];
