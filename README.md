@@ -7,4 +7,4 @@ Look up a city and see a 5 day weather forecast! Previously looked up cities wil
 ## Visit The Site!
 You can visit the deployed website here: https://shimmyshong.github.io/weather-dashboard/
 
-![screenshot of weather website](assets\images\chrome_fzmKja5Eqe.png)
+![screenshot of weather website](assets/images/chrome_fzmKja5Eqe.png)
