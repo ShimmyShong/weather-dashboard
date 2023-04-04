@@ -111,8 +111,8 @@ buttonEl.on('click', function(event){
     queryGeoURL = "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + APIKey; // needed to redefine the URL in this eventlistener because it wouldnt work properly otherwise for reasons i dont understand
     console.log(queryGeoURL)
 
-    var previousCities = JSON.parse(localStorage.getItem('previousCities'))  // gets previous cities from local storage
-
+    var previousCities = JSON.parse(localStorage.getItem('previousCities')) || [];  // gets previous cities from local storage
+    console.log(previousCities)
     if (!previousCities.includes(city)) { // adds the current city to the list of previous cities if it doesn't already exist
         previousCities.push(city);
         localStorage.setItem('previousCities', JSON.stringify(previousCities));
@@ -124,18 +124,21 @@ buttonEl.on('click', function(event){
 
 var previousCities = JSON.parse(localStorage.getItem('previousCities')); // this gets the previously searched cities from local storage and adds them in the sidebar
 var sidebarEl = $('#sidebar');
-previousCities.forEach(function(city) {
-    var cityEl = $('<li>').addClass('list-group-item position-relative m-0').text(city);
-    sidebarEl.append(cityEl);
-
-    // Add a click event listener to the cityEl element
-    cityEl.on('click', function(event) {
-        event.preventDefault();
-        usedDays = [];
-        weatherInfoArray = [];
-        $('#cards-container').empty();
-        city = $(this).text().trim(); // get the city name from the clicked element
-        queryGeoURL = "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + APIKey;
-        getCoordinates();
+if (previousCities){
+    previousCities.forEach(function(city) {
+        var cityEl = $('<li>').addClass('list-group-item position-relative m-0').text(city);
+        sidebarEl.append(cityEl);
+    
+        // Add a click event listener to the cityEl element
+        cityEl.on('click', function(event) {
+            event.preventDefault();
+            usedDays = [];
+            weatherInfoArray = [];
+            $('#cards-container').empty();
+            city = $(this).text().trim(); // get the city name from the clicked element
+            queryGeoURL = "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + APIKey;
+            getCoordinates();
+        });
     });
-});
+}
+
